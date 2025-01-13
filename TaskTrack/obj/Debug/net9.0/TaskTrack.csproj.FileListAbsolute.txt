@@ -1,0 +1,14 @@
+/home/xhyth3r/Source-Codes/CSharpProjects/TaskTracker/TaskTrack/bin/Debug/net9.0/TaskTrack
+/home/xhyth3r/Source-Codes/CSharpProjects/TaskTracker/TaskTrack/bin/Debug/net9.0/TaskTrack.deps.json
+/home/xhyth3r/Source-Codes/CSharpProjects/TaskTracker/TaskTrack/bin/Debug/net9.0/TaskTrack.runtimeconfig.json
+/home/xhyth3r/Source-Codes/CSharpProjects/TaskTracker/TaskTrack/bin/Debug/net9.0/TaskTrack.dll
+/home/xhyth3r/Source-Codes/CSharpProjects/TaskTracker/TaskTrack/bin/Debug/net9.0/TaskTrack.pdb
+/home/xhyth3r/Source-Codes/CSharpProjects/TaskTracker/TaskTrack/obj/Debug/net9.0/TaskTrack.GeneratedMSBuildEditorConfig.editorconfig
+/home/xhyth3r/Source-Codes/CSharpProjects/TaskTracker/TaskTrack/obj/Debug/net9.0/TaskTrack.AssemblyInfoInputs.cache
+/home/xhyth3r/Source-Codes/CSharpProjects/TaskTracker/TaskTrack/obj/Debug/net9.0/TaskTrack.AssemblyInfo.cs
+/home/xhyth3r/Source-Codes/CSharpProjects/TaskTracker/TaskTrack/obj/Debug/net9.0/TaskTrack.csproj.CoreCompileInputs.cache
+/home/xhyth3r/Source-Codes/CSharpProjects/TaskTracker/TaskTrack/obj/Debug/net9.0/TaskTrack.dll
+/home/xhyth3r/Source-Codes/CSharpProjects/TaskTracker/TaskTrack/obj/Debug/net9.0/refint/TaskTrack.dll
+/home/xhyth3r/Source-Codes/CSharpProjects/TaskTracker/TaskTrack/obj/Debug/net9.0/TaskTrack.pdb
+/home/xhyth3r/Source-Codes/CSharpProjects/TaskTracker/TaskTrack/obj/Debug/net9.0/TaskTrack.genruntimeconfig.cache
+/home/xhyth3r/Source-Codes/CSharpProjects/TaskTracker/TaskTrack/obj/Debug/net9.0/ref/TaskTrack.dll
