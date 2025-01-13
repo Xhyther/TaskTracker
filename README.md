@@ -1,6 +1,6 @@
 # Task Tracker CLI
 
-Task Tracker is a command-line interface (CLI) application that helps you track and manage your tasks. With this tool, you can organize your tasks into different states, such as "to do," "in progress," and "done." This project is an excellent way to practice programming skills like working with the filesystem, handling user inputs, and building a simple CLI application.
+Task Tracker is a command-line interface (CLI) application built in **C#** to help you track and manage your tasks. With this tool, you can organize your tasks into different states, such as "to do," "in progress," and "done." This project demonstrates working with the filesystem, handling user inputs, and building a CLI application using C#.
 
 ## Features
 The Task Tracker CLI application provides the following functionalities:
@@ -16,7 +16,6 @@ The Task Tracker CLI application provides the following functionalities:
   - List tasks by status (e.g., done, to do, in progress).
 
 ## Requirements
-The application must meet the following requirements:
 
 1. **Command-Line Execution**:
    - Run the application from the command line.
@@ -25,7 +24,7 @@ The application must meet the following requirements:
    - Store tasks in a JSON file in the current directory.
    - Create the JSON file automatically if it does not exist.
 3. **Constraints**:
-   - Use the native filesystem module of your programming language to interact with the JSON file.
+   - Use C#'s native filesystem module to interact with the JSON file.
    - Do not use external libraries or frameworks to build the project.
 4. **Error Handling**:
    - Handle errors and edge cases gracefully (e.g., invalid task IDs, missing arguments).
@@ -112,9 +111,24 @@ task-cli list in-progress
   ```
 
 ### Development Notes
-1. **Programming Language**: You can use any language to build this project.
-2. **File Handling**: Use your language's native filesystem module to interact with the `tasks.json` file.
-3. **CLI Input Handling**: Use positional arguments to capture user inputs and actions.
+1. **Programming Language**: The project is implemented in **C#**.
+2. **File Handling**: Used `System.IO` for interacting with the `tasks.json` file.
+3. **CLI Input Handling**: Used `System.CommandLine` for parsing user inputs and actions.
+
+## How to Run
+1. Compile the C# code:
+   ```bash
+   dotnet build
+   ```
+2. Run the CLI application directly:
+   ```bash
+   dotnet run -- add "Sample task"
+   ```
+3. Alternatively, publish the application and add it to your PATH for global execution:
+   ```bash
+   dotnet publish -c Release -o ./publish
+   ./publish/task-cli add "Another task"
+   ```
 
 ## Future Enhancements
 - Add due dates or priorities to tasks.
@@ -123,6 +137,4 @@ task-cli list in-progress
 - Add support for task categories.
 
 ---
-
-This project is an excellent starting point for building robust CLI tools while learning about user input handling, file operations, and application design!
 
