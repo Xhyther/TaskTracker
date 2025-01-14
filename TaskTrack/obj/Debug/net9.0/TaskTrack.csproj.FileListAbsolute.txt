@@ -12,3 +12,4 @@
 /home/xhyth3r/Source-Codes/CSharpProjects/TaskTracker/TaskTrack/obj/Debug/net9.0/TaskTrack.pdb
 /home/xhyth3r/Source-Codes/CSharpProjects/TaskTracker/TaskTrack/obj/Debug/net9.0/TaskTrack.genruntimeconfig.cache
 /home/xhyth3r/Source-Codes/CSharpProjects/TaskTracker/TaskTrack/obj/Debug/net9.0/ref/TaskTrack.dll
+/home/xhyth3r/Source-Codes/CSharpProjects/TaskTracker/TaskTrack/obj/Debug/net9.0/TaskTrack.sourcelink.json
