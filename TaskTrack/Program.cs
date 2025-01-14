@@ -1,9 +1,28 @@
-﻿namespace TaskTrack;
+﻿using System.CommandLine;
+
+namespace TaskTrack;
 
 class Program
 {
-    static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+       //Root Command
+        var rootCommand = new RootCommand("task-cli");
+        var adddCommand = new Command("add", "Add a new task");
+        adddCommand.AddAlias("a");
+        var listCommand = new Command("list", "List all tasks");
+        listCommand.AddAlias("l");
+        var removeCommand = new Command("remove", "Remove a task");
+        removeCommand.AddAlias("r");
+        var updateCommand = new Command("update", "Update a task");
+        updateCommand.AddAlias("u");
+
+        rootCommand.AddCommand(adddCommand);
+        rootCommand.AddCommand(listCommand);
+        rootCommand.AddCommand(removeCommand);
+        rootCommand.AddCommand(updateCommand);
+
+
+
     }
 }
