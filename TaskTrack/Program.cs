@@ -4,6 +4,8 @@ namespace TaskTrack;
 
 class Program
 {
+    private static int TaskId = 0;
+
     public static async Task Main(string[] args)
     {
        //Root Command
@@ -14,6 +16,8 @@ class Program
         {
             new Argument<string> (name: "TaskName", description: "Name of the task"),
             new Argument<string> (name: "TaskDescription", description: "Description of the task"),
+            new Option<string>(new string[] {"--state", "-s"}, "State of the task"),
+            new Option<string>(new string[] {"--priority", "-p"}, "Priority of the task")
         };
         addCommand.AddAlias("a");
 
@@ -23,7 +27,7 @@ class Program
         var removeCommand = new Command("remove", "Remove a task")
         {
             new Argument<string> (name: "TaskName", description: "Name of the task"),
-            new Argument<int> (name: "TaskId", description: "ID of the task"),
+            new Argument<int> (name: "TaskId", description: "ID of the task")
         };
         removeCommand.AddAlias("r");
 
@@ -32,6 +36,8 @@ class Program
             new Argument<int> (name: "TaskId", description: "ID of the task"),
             new Argument<string> (name: "TaskName", description: "Name of the task"),
             new Argument<string> (name: "TaskDescription", description: "Description of the task"),
+             new Option<string>(new string[] {"--state", "-s"}, "State of the task"),
+            new Option<string>(new string[] {"--priority", "-p"}, "Priority of the task")
 
         };
         updateCommand.AddAlias("u");
