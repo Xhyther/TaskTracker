@@ -16,8 +16,8 @@ class Program
         {
             new Argument<string> (name: "TaskName", description: "Name of the task"),
             new Argument<string> (name: "TaskDescription", description: "Description of the task"),
-            new Option<string>(new string[] {"--state", "-s"}, "State of the task"),
-            new Option<string>(new string[] {"--priority", "-p"}, "Priority of the task")
+            new Option<string>(new string[] {"--state", "-s"}, "State of the task (default: not started)"),
+            new Option<string>(new string[] {"--priority", "-p"}, "Priority of the task (default: low)")
         };
         addCommand.AddAlias("a");
 
@@ -36,8 +36,8 @@ class Program
             new Argument<int> (name: "TaskId", description: "ID of the task"),
             new Argument<string> (name: "TaskName", description: "Name of the task"),
             new Argument<string> (name: "TaskDescription", description: "Description of the task"),
-             new Option<string>(new string[] {"--state", "-s"}, "State of the task"),
-            new Option<string>(new string[] {"--priority", "-p"}, "Priority of the task")
+            new Option<string>(new string[] {"--state", "-s"}, "State of the task (default: not started)"),
+            new Option<string>(new string[] {"--priority", "-p"}, "Priority of the task (default: low)")
 
         };
         updateCommand.AddAlias("u");
