@@ -28,18 +28,24 @@ class Program
         description: "Name of the task");
 
         var DeleteNameArgument = new Argument<string>
-        (name: "NameToDelete",
+        (name: "Name of Task to delete",
         description: "Name of the task to delete");
 
         var DeleteIDArgument = new Argument<int>
-        (name: "IDToDelete",
+        (name: "Id of Task to delete",
         description: "ID of the task to delete");
+
+        var UpdatebyIDArgument = new Argument<int>
+        (name: "Id of Task to update",
+        description: "ID of the task to update");
 
 
         //Adding a task to the add command
         addCommand.AddArgument(TaskNameArgument);
         removeCommand.AddArgument(DeleteNameArgument);
         removeCommand.AddArgument(DeleteIDArgument);
+        updateCommand.AddArgument(TaskNameArgument);
+        updateCommand.AddArgument(DeleteNameArgument);
 
 
 
