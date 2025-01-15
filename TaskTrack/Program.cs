@@ -1,4 +1,9 @@
 ﻿using System.CommandLine;
+using System.Text.Json;
+using System.IO;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
 
 namespace TaskTrack;
 
@@ -8,6 +13,8 @@ class Program
 
     public static async Task Main(string[] args)
     {
+        EnsureJsonFileExists();
+        
        //Root Command
         var rootCommand = new RootCommand("task-cli");
 
@@ -72,7 +79,8 @@ class Program
         addCommand.SetHandler((string name, string description, State state, Priority priority) => 
         {
            var task = new Tasks(_TaskId++, name, description, state, priority);
-           
+            
+
         });
 
         rootCommand.AddCommand(addCommand);
@@ -83,4 +91,19 @@ class Program
         await rootCommand.InvokeAsync(args);
         
     }
+
+    static void EnsureJsonFileExists()
+    {
+        if (!File.Exists("tasks.json"))
+        {
+            var defaultContent = new
+            {
+                tasks = new List<object>()
+            };
+
+            File.WriteAllText("tasks.json", JsonSerializer.Serialize(defaultContent, new JsonSerializerOptions { WriteIndented = true }));
+            Console.WriteLine("Created tasks.json file with default structure.");
+        }
+
+    }   
 }
