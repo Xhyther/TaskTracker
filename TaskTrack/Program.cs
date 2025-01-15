@@ -4,7 +4,7 @@ namespace TaskTrack;
 
 class Program
 {
-    private static int TaskId = 0;
+    private static int _TaskId = 0;
 
     public static async Task Main(string[] args)
     {
@@ -14,10 +14,21 @@ class Program
         //Defining the subCommands
         var addCommand = new Command("add", "Add a new task")
         {
-            new Argument<string> (name: "TaskName", description: "Name of the task"),
-            new Argument<string> (name: "TaskDescription", description: "Description of the task"),
-            new Option<string>(new string[] {"--state", "-s"}, "State of the task (default: not started)"),
-            new Option<string>(new string[] {"--priority", "-p"}, "Priority of the task (default: low)")
+            new Argument<string> (name: "Name", description: "Name of the task"),
+            new Argument<string> (name: "Description", description: "Description of the task"),
+            
+            new Option<State>(
+            aliases: new string[] { "--state", "-s" },
+            description: "State of the task (default: NotStarted)",
+            getDefaultValue: () => State.NotStarted // Default value for the option
+            ),
+
+            new Option<Priority>(
+            aliases: new string[] { "--priority", "-p" },
+            description: "Priority of the task (default: Low)",
+            getDefaultValue: () => Priority.Low // Default value for the option
+            )
+
         };
         addCommand.AddAlias("a");
 
@@ -25,12 +36,13 @@ class Program
         {
             new Option<string>(new string[] {"--state", "-s"}, "State of the task (default: all)"),
             new Option<string>(new string[] {"--priority", "-p"}, "Priority of the task (default: all)")
+
         };
         listCommand.AddAlias("l");
 
         var removeCommand = new Command("remove", "Remove a task")
         {
-            new Argument<string> (name: "TaskName", description: "Name of the task"),
+            new Argument<string> (name: "Name", description: "Name of the task"),
             new Argument<int> (name: "TaskId", description: "ID of the task")
         };
         removeCommand.AddAlias("r");
@@ -38,16 +50,30 @@ class Program
         var updateCommand = new Command("update", "Update a task")
         {
             new Argument<int> (name: "TaskId", description: "ID of the task"),
-            new Argument<string> (name: "TaskName", description: "Name of the task"),
-            new Argument<string> (name: "TaskDescription", description: "Description of the task"),
-            new Option<string>(new string[] {"--state", "-s"}, "State of the task (default: not started)"),
-            new Option<string>(new string[] {"--priority", "-p"}, "Priority of the task (default: low)")
+            new Argument<string> (name: "Name", description: "Name of the task"),
+            new Argument<string> (name: "Description", description: "Description of the task"),
+            new Option<State>(
+            aliases: new string[] { "--state", "-s" },
+            description: "State of the task (default: NotStarted)",
+            getDefaultValue: () => State.NotStarted // Default value for the option
+            ),
+
+            new Option<Priority>(
+            aliases: new string[] { "--priority", "-p" },
+            description: "Priority of the task (default: Low)",
+            getDefaultValue: () => Priority.Low // Default value for the option
+            )
+
 
         };
         updateCommand.AddAlias("u");
 
 
-
+        addCommand.SetHandler((string name, string description, State state, Priority priority) => 
+        {
+           var task = new Tasks(_TaskId++, name, description, state, priority);
+           
+        });
 
         rootCommand.AddCommand(addCommand);
         rootCommand.AddCommand(listCommand);

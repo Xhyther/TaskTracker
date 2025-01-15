@@ -4,18 +4,25 @@ namespace TaskTrack;
 
 public class Tasks
 {
-    private static int TaskId { get; set; } = 0;
-    private string TaskName { get; set; }
-    private string? TaskDescription { get; set; }
-    private bool TaskCompleted { get; set; }
-    private string TaskState { get; set; }
-    private string TaskPriority { get; set; }
-    private DateTime TaskDate { get; set; }
+    public static int TaskId { get; set; }
+    public string TaskName { get; set; }
+    public string? TaskDescription { get; set; }
+    public bool TaskCompleted { get; set; }
+    public State TaskState { get; set; }
+    public Priority TaskPriority { get; set; }
+    public DateTime TaskDate { get; set; }
 
-    public Tasks()
+    public Tasks(int id, string name, string description, State state, Priority priority)
     {
+        TaskId = id;
+        TaskName = name;
+        TaskDescription = description;
+        TaskCompleted = false;
+        TaskState = state;
+        TaskPriority = priority;
         TaskDate = DateTime.Now;
     }
+   
 
     
    
