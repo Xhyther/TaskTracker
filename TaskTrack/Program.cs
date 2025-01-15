@@ -53,5 +53,8 @@ class Program
         rootCommand.AddCommand(listCommand);
         rootCommand.AddCommand(removeCommand);
         rootCommand.AddCommand(updateCommand);
+
+        await rootCommand.InvokeAsync(args);
+        
     }
 }
