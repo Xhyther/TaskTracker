@@ -3,6 +3,8 @@ using System.Text.Json;
 using System.IO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.CommandLine.Binding;
+
 
 
 namespace TaskTrack;
@@ -79,9 +81,26 @@ class Program
         addCommand.SetHandler((string name, string description, State state, Priority priority) => 
         {
            var task = new Tasks(_TaskId++, name, description, state, priority);
+
+            var tasks = File.Exists("tasks.json")
+            ? JsonSerializer.Deserialize<List<Tasks>>(File.ReadAllText("tasks.json")) ?? new List<Tasks>()
+            : new List<Tasks>();
+
+           tasks.Add(task);
+
+        // Save tasks back to the JSON file
+        File.WriteAllText("tasks.json", JsonSerializer.Serialize(tasks, new JsonSerializerOptions { WriteIndented = true }));
+
+        Console.WriteLine($"Task '{task.TaskName}' added successfully with state '{task.TaskState}' and priority '{task.TaskPriority}'.");
             
 
-        });
+        },
+
+        //Some Data Binding here
+
+        
+        
+        );
 
         rootCommand.AddCommand(addCommand);
         rootCommand.AddCommand(listCommand);
