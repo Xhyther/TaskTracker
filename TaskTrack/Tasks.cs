@@ -4,7 +4,7 @@ namespace TaskTrack;
 
 public class Tasks
 {
-    public static int TaskId { get; set; }
+    public static int TaskId { get; set; } = 0;
     public string TaskName { get; set; }
     public string? TaskDescription { get; set; }
     public bool TaskCompleted { get; set; }
@@ -12,9 +12,9 @@ public class Tasks
     public Priority TaskPriority { get; set; }
     public DateTime TaskDate { get; set; }
 
-    public Tasks(int id, string name, string description, State state, Priority priority)
+    public Tasks(string name, string description, State state, Priority priority)
     {
-        TaskId = id;
+        TaskId++;
         TaskName = name;
         TaskDescription = description;
         TaskCompleted = false;

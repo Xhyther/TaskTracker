@@ -4,6 +4,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.CommandLine.Binding;
+using System.CommandLine.Invocation;
 
 
 
@@ -23,8 +24,8 @@ class Program
         //Defining the subCommands
         var addCommand = new Command("add", "Add a new task")
         {
-            new Argument<string> (name: "Name", description: "Name of the task"),
-            new Argument<string> (name: "Description", description: "Description of the task"),
+            new Argument<string>(name: "name", description: "Name of the task"),
+            new Argument<string>(name: "description", description: "Description of the task"),
             
             new Option<State>(
             aliases: new string[] { "--state", "-s" },
@@ -51,7 +52,7 @@ class Program
 
         var removeCommand = new Command("remove", "Remove a task")
         {
-            new Argument<string> (name: "Name", description: "Name of the task"),
+            new Argument<string> (name: "name", description: "Name of the task"),
             new Argument<int> (name: "TaskId", description: "ID of the task")
         };
         removeCommand.AddAlias("-r");
@@ -59,8 +60,8 @@ class Program
         var updateCommand = new Command("update", "Update a task")
         {
             new Argument<int> (name: "TaskId", description: "ID of the task"),
-            new Argument<string> (name: "Name", description: "Name of the task"),
-            new Argument<string> (name: "Description", description: "Description of the task"),
+            new Argument<string> (name: "name", description: "Name of the task"),
+            new Argument<string> (name: "description", description: "Description of the task"),
             new Option<State>(
             aliases: new string[] { "--state", "-s" },
             description: "State of the task (default: NotStarted)",
@@ -77,10 +78,36 @@ class Program
         };
         updateCommand.AddAlias("-u");
 
+        
+        
 
-        addCommand.SetHandler((string name, string description, State state, Priority priority) => 
+        addCommand.SetHandler( async (InvocationContext context) =>
         {
-           var task = new Tasks(_TaskId++, name, description, state, priority);
+           
+            // Correctly get argument and option values
+            var name = context.ParseResult.GetValueForArgument(addCommand.Arguments[0]) as string; // Get name string
+            var description = context.ParseResult.GetValueForArgument(addCommand.Arguments[1])as string; // Get description string
+
+            // Convert state and priority to enum types (State and Priority)
+            var state = context.ParseResult.GetValueForOption(addCommand.Options[0]);
+            var priority = context.ParseResult.GetValueForOption(addCommand.Options[1]);
+
+            
+            // Ensure the state and priority are valid enums
+            if (!Enum.TryParse(state.ToString(), out State taskState))
+            {
+                Console.WriteLine($"Invalid state value '{state}', defaulting to 'NotStarted'.");
+                taskState = State.NotStarted;  // Fallback default value
+            }
+
+            if (!Enum.TryParse(priority.ToString(), out Priority taskPriority))
+            {
+                Console.WriteLine($"Invalid priority value '{priority}', defaulting to 'Low'.");
+                taskPriority = Priority.Low;  // Fallback default value
+            }
+
+            // Create the task object with the string values for name and description
+            var task = new Tasks(name, description, taskState, taskPriority);
 
             var tasks = File.Exists("tasks.json")
             ? JsonSerializer.Deserialize<List<Tasks>>(File.ReadAllText("tasks.json")) ?? new List<Tasks>()
@@ -89,18 +116,13 @@ class Program
            tasks.Add(task);
 
         // Save tasks back to the JSON file
-        File.WriteAllText("tasks.json", JsonSerializer.Serialize(tasks, new JsonSerializerOptions { WriteIndented = true }));
+        await File.WriteAllTextAsync("tasks.json", JsonSerializer.Serialize(tasks, new JsonSerializerOptions { WriteIndented = true }));
 
         Console.WriteLine($"Task '{task.TaskName}' added successfully with state '{task.TaskState}' and priority '{task.TaskPriority}'.");
-            
 
-        },
+       
 
-        //Some Data Binding here
-
-        
-        
-        );
+        });
 
         rootCommand.AddCommand(addCommand);
         rootCommand.AddCommand(listCommand);
