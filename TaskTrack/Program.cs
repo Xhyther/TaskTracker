@@ -21,7 +21,11 @@ class Program
         };
         addCommand.AddAlias("a");
 
-        var listCommand = new Command("list", "List all tasks");
+        var listCommand = new Command("list", "List all tasks")
+        {
+            new Option<string>(new string[] {"--state", "-s"}, "State of the task (default: all)"),
+            new Option<string>(new string[] {"--priority", "-p"}, "Priority of the task (default: all)")
+        };
         listCommand.AddAlias("l");
 
         var removeCommand = new Command("remove", "Remove a task")
