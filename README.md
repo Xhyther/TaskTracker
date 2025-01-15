@@ -15,19 +15,7 @@ The Task Tracker CLI application provides the following functionalities:
   - List all tasks.
   - List tasks by status (e.g., done, to do, in progress).
 
-## Requirements
 
-1. **Command-Line Execution**:
-   - Run the application from the command line.
-   - Accept user actions and inputs as arguments.
-2. **Task Storage**:
-   - Store tasks in a JSON file in the current directory.
-   - Create the JSON file automatically if it does not exist.
-3. **Constraints**:
-   - Use C#'s native filesystem module to interact with the JSON file.
-   - Do not use external libraries or frameworks to build the project.
-4. **Error Handling**:
-   - Handle errors and edge cases gracefully (e.g., invalid task IDs, missing arguments).
 
 ## Usage
 Below is the list of commands and their usage:
