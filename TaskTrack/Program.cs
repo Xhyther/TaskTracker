@@ -39,7 +39,7 @@ class Program
             )
 
         };
-        addCommand.AddAlias("a");
+        addCommand.AddAlias("-a");
 
         var listCommand = new Command("list", "List all tasks")
         {
@@ -47,14 +47,14 @@ class Program
             new Option<string>(new string[] {"--priority", "-p"}, "Priority of the task (default: all)")
 
         };
-        listCommand.AddAlias("l");
+        listCommand.AddAlias("-l");
 
         var removeCommand = new Command("remove", "Remove a task")
         {
             new Argument<string> (name: "Name", description: "Name of the task"),
             new Argument<int> (name: "TaskId", description: "ID of the task")
         };
-        removeCommand.AddAlias("r");
+        removeCommand.AddAlias("-r");
 
         var updateCommand = new Command("update", "Update a task")
         {
@@ -75,7 +75,7 @@ class Program
 
 
         };
-        updateCommand.AddAlias("u");
+        updateCommand.AddAlias("-u");
 
 
         addCommand.SetHandler((string name, string description, State state, Priority priority) => 
