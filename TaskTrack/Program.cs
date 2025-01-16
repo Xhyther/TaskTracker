@@ -113,6 +113,43 @@ class Program
             ? JsonSerializer.Deserialize<List<Tasks>>(File.ReadAllText("tasks.json")) ?? new List<Tasks>()
             : new List<Tasks>();
 
+            updateCommand.SetHandler( async (InvocationContext context) =>
+            {
+                var taskId = (int)context.ParseResult.GetValueForArgument(updateCommand.Arguments[0]);
+                var name = context.ParseResult.GetValueForArgument(updateCommand.Arguments[1]) as string;
+                var description = context.ParseResult.GetValueForArgument(updateCommand.Arguments[2]) as string;
+                var state = context.ParseResult.GetValueForOption(updateCommand.Options[0]);
+                var priority = context.ParseResult.GetValueForOption(updateCommand.Options[1]);
+
+                if (!Enum.TryParse(state.ToString(), out State taskState))
+                {
+                    Console.WriteLine($"Invalid state value '{state}', defaulting to 'NotStarted'.");
+                    taskState = State.NotStarted;  // Fallback default value
+                }
+
+                if (!Enum.TryParse(priority.ToString(), out Priority taskPriority))
+                {
+                    Console.WriteLine($"Invalid priority value '{priority}', defaulting to 'Low'.");
+                    taskPriority = Priority.Low;  // Fallback default value
+                }
+
+                var task = tasks.Find(t => t.TaskId == taskId);
+                if (task == null)
+                {
+                    Console.WriteLine($"Task with ID '{taskId}' not found.");
+                    return;
+                }
+
+                task.TaskName = name;
+                task.TaskDescription = description;
+                task.TaskState = taskState;
+                task.TaskPriority = taskPriority;
+
+                await File.WriteAllTextAsync("tasks.json", JsonSerializer.Serialize(tasks, new JsonSerializerOptions { WriteIndented = true }));
+
+                Console.WriteLine($"Task '{task.TaskName}' updated successfully with state '{task.TaskState}' and priority '{task.TaskPriority}'.");
+            });
+
            tasks.Add(task);
 
         // Save tasks back to the JSON file
