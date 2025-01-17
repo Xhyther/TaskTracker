@@ -109,57 +109,129 @@ class Program
             // Create the task object with the string values for name and description
             var task = new Tasks(name, description, taskState, taskPriority);
 
+            try
+            {
             var tasks = File.Exists("tasks.json")
             ? JsonSerializer.Deserialize<List<Tasks>>(File.ReadAllText("tasks.json")) ?? new List<Tasks>()
             : new List<Tasks>();
 
-            updateCommand.SetHandler( async (InvocationContext context) =>
+             tasks.Add(task);
+
+            // Save tasks back to the JSON file
+            await File.WriteAllTextAsync("tasks.json", JsonSerializer.Serialize(tasks, new JsonSerializerOptions { WriteIndented = true }));
+
+            }
+            catch (Exception ex)
             {
-                var taskId = (int)context.ParseResult.GetValueForArgument(updateCommand.Arguments[0]);
-                var name = context.ParseResult.GetValueForArgument(updateCommand.Arguments[1]) as string;
-                var description = context.ParseResult.GetValueForArgument(updateCommand.Arguments[2]) as string;
-                var state = context.ParseResult.GetValueForOption(updateCommand.Options[0]);
-                var priority = context.ParseResult.GetValueForOption(updateCommand.Options[1]);
+                Console.WriteLine($"Error adding task: {ex.Message}");
+            }
 
-                if (!Enum.TryParse(state.ToString(), out State taskState))
-                {
-                    Console.WriteLine($"Invalid state value '{state}', defaulting to 'NotStarted'.");
-                    taskState = State.NotStarted;  // Fallback default value
-                }
-
-                if (!Enum.TryParse(priority.ToString(), out Priority taskPriority))
-                {
-                    Console.WriteLine($"Invalid priority value '{priority}', defaulting to 'Low'.");
-                    taskPriority = Priority.Low;  // Fallback default value
-                }
-
-                var task = tasks.Find(t => t.TaskId == taskId);
-                if (task == null)
-                {
-                    Console.WriteLine($"Task with ID '{taskId}' not found.");
-                    return;
-                }
-
-                task.TaskName = name;
-                task.TaskDescription = description;
-                task.TaskState = taskState;
-                task.TaskPriority = taskPriority;
-
-                await File.WriteAllTextAsync("tasks.json", JsonSerializer.Serialize(tasks, new JsonSerializerOptions { WriteIndented = true }));
-
-                Console.WriteLine($"Task '{task.TaskName}' updated successfully with state '{task.TaskState}' and priority '{task.TaskPriority}'.");
-            });
-
-           tasks.Add(task);
-
-        // Save tasks back to the JSON file
-        await File.WriteAllTextAsync("tasks.json", JsonSerializer.Serialize(tasks, new JsonSerializerOptions { WriteIndented = true }));
-
-        Console.WriteLine($"Task '{task.TaskName}' added successfully with state '{task.TaskState}' and priority '{task.TaskPriority}'.");
-
-       
+            Console.WriteLine($"Task '{task.TaskName}' added successfully with state '{task.TaskState}' and priority '{task.TaskPriority}'.");
 
         });
+        
+       
+   
+        listCommand.SetHandler(async (InvocationContext context) =>
+        {
+            var state = context.ParseResult.GetValueForOption(listCommand.Options[0]);
+            var priority = context.ParseResult.GetValueForOption(listCommand.Options[1]);
+
+            var tasks = File.Exists("tasks.json")
+            ? JsonSerializer.Deserialize<List<Tasks>>(File.ReadAllText("tasks.json")) ?? new List<Tasks>()
+            : new List<Tasks>();
+
+            if (state != null)
+            {
+                tasks = tasks.Where(t => t.TaskState.ToString().Equals(state)).ToList();
+            }
+
+            if (priority != null)
+            {
+                tasks = tasks.Where(t => t.TaskPriority.ToString().Equals(priority)).ToList();
+            }
+
+            if (tasks.Count == 0)
+            {
+                Console.WriteLine("No tasks found.");
+            }
+            else
+            {
+                foreach (var task in tasks)
+                {
+                    Console.WriteLine($"Task ID: {++_TaskId}");
+                    Console.WriteLine($"Name: {task.TaskName}");
+                    Console.WriteLine($"Description: {task.TaskDescription}");
+                    Console.WriteLine($"State: {task.TaskState}");
+                    Console.WriteLine($"Priority: {task.TaskPriority}");
+                    Console.WriteLine();
+                }
+            }
+        });
+
+        removeCommand.SetHandler(async (InvocationContext context) =>
+        {
+            var name = context.ParseResult.GetValueForArgument(removeCommand.Arguments[0]) as string;
+            var taskId = context.ParseResult.GetValueForArgument(removeCommand.Arguments[1]) as int?;
+
+            var tasks = File.Exists("tasks.json")
+            ? JsonSerializer.Deserialize<List<Tasks>>(File.ReadAllText("tasks.json")) ?? new List<Tasks>()
+            : new List<Tasks>();
+
+            var task = tasks.FirstOrDefault(t => t.TaskName.Equals(name) && Tasks.TaskId == taskId);
+
+            if (task == null)
+            {
+                Console.WriteLine($"Task '{name}' with ID '{taskId}' not found.");
+            }
+            else
+            {
+                tasks.Remove(task);
+                await File.WriteAllTextAsync("tasks.json", JsonSerializer.Serialize(tasks, new JsonSerializerOptions { WriteIndented = true }));
+                Console.WriteLine($"Task '{name}' with ID '{taskId}' removed successfully.");
+            }
+        });
+       
+        updateCommand.SetHandler(async (InvocationContext context) =>
+        {
+            var taskId = context.ParseResult.GetValueForArgument(updateCommand.Arguments[0]) as int?;
+            var name = context.ParseResult.GetValueForArgument(updateCommand.Arguments[1]) as string;
+            var description = context.ParseResult.GetValueForArgument(updateCommand.Arguments[2]) as string;
+
+            var state = context.ParseResult.GetValueForOption(updateCommand.Options[0]);
+            var priority = context.ParseResult.GetValueForOption(updateCommand.Options[1]);
+
+            var tasks = File.Exists("tasks.json")
+            ? JsonSerializer.Deserialize<List<Tasks>>(File.ReadAllText("tasks.json")) ?? new List<Tasks>()
+            : new List<Tasks>();
+
+            var task = tasks.FirstOrDefault(t => t.TaskId == taskId);
+
+            if (task == null)
+            {
+                Console.WriteLine($"Task with ID '{taskId}' not found.");
+            }
+            else
+            {
+                task.TaskName = name;
+                task.TaskDescription = description;
+
+                if (Enum.TryParse(state.ToString(), out State taskState))
+                {
+                    task.TaskState = taskState;
+                }
+
+                if (Enum.TryParse(priority.ToString(), out Priority taskPriority))
+                {
+                    task.TaskPriority = taskPriority;
+                }
+
+                await File.WriteAllTextAsync("tasks.json", JsonSerializer.Serialize(tasks, new JsonSerializerOptions { WriteIndented = true }));
+                Console.WriteLine($"Task with ID '{taskId}' updated successfully.");
+            }
+        });
+
+        
 
         rootCommand.AddCommand(addCommand);
         rootCommand.AddCommand(listCommand);
